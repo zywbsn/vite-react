@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { Tag, Space, Modal } from "antd";
-import { SuperForm, SuperTable } from "../../../components/index";
+import { Space, Modal } from "antd";
+import { SuperForm, SuperTable, SuperTags } from "../../../components/index";
 
 const SuperTableIndex = () => {
   const [open, setOpen] = useState(false); //控制弹框
+
+  const tagsList = [
+    { label: "nice", value: "nice", color: "green" },
+    { label: "developer", value: "developer", color: "geekblue" },
+    { label: "loser", value: "loser", color: "volcano" },
+    { label: "cool", value: "cool", color: "blue" },
+    { label: "teacher", value: "teacher", color: "pink" }
+  ];
 
   const data = [
     {
@@ -114,17 +122,7 @@ const SuperTableIndex = () => {
       dataIndex: "tags",
       render: (_, { tags }) => (
         <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
+          <SuperTags tags={tags} menu={tagsList} />
         </>
       )
     },

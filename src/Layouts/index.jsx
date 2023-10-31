@@ -18,7 +18,7 @@ const Layouts = () => {
     <>
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="w-full h-16 flex items-center justify-center">
+          <div className="w-full h-16 flex items-center justify-center bg-[#ffffff]">
             <Html5TwoTone twoToneColor="#A6ADB4" className="!text-3xl mr-1" />
             <span className={collapsed ? "hidden" : "text-lg font-bold"}>React-Admin</span>
           </div>
@@ -34,7 +34,8 @@ const Layouts = () => {
         <Layout>
           <Header
             style={{
-              padding: 0
+              padding: 0,
+              backgroundColor: "#ffffff"
             }}
             className="flex w-full">
             <Button
@@ -53,7 +54,8 @@ const Layouts = () => {
               margin: "24px 16px",
               padding: 24,
               height: "calc(100vh - 112px)",
-              overflow: "auto"
+              overflow: "auto",
+              backgroundColor: "#ffffff"
             }}>
             <Outlet />
           </Content>

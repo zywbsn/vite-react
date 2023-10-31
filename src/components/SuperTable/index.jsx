@@ -1,12 +1,12 @@
 import React from "react";
 import { Table } from "antd";
-import SuperButton from "../SuperButton/index"
+import SuperButton from "../SuperButton/index";
 
 const ButtonList = (props) => {
   const { buttonList, custom } = props;
   if (!custom) {
     const Items = buttonList.map((item) => (
-      <React.Fragment key={item.text} >
+      <React.Fragment key={item.text}>
         <SuperButton {...item} />
       </React.Fragment>
     ));
@@ -18,7 +18,7 @@ const SuperTable = (props) => {
 
   return (
     <>
-      <div className='mb-3'>
+      <div className="mb-3">
         <ButtonList {...leftButton} />
       </div>
       <Table
@@ -28,9 +28,10 @@ const SuperTable = (props) => {
         scroll={{
           y: 500
         }}
-        {...tableConfig} />;
+        {...tableConfig}
+      />
     </>
-  )
+  );
 };
 
 export default SuperTable;
