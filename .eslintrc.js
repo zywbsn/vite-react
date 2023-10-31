@@ -14,8 +14,8 @@ module.exports = {
      * 去声明数据类型，所以会报错。这里有两种处理方法：
      */
     // "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended"
+    "plugin:react/jsx-runtime"
+    // "plugin:react-hooks/recommended"
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },

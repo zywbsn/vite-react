@@ -16,15 +16,21 @@ for (const key in routesMeta) {
   let pathName = key.replace("../pages", "").replace("/router.jsx", "");
   const component = key.replace("router.jsx", "index.jsx");
   const icon = routesMeta[key].icon || "";
-
   if (routesMeta[key].isFather) {
-    MenuList.push({ label: routesMeta[key].name, path: "/Layout" + pathName, children: [], icon });
+    MenuList.push({
+      label: routesMeta[key].name,
+      path: "/Layout" + pathName,
+      children: [],
+      icon,
+      sort: routesMeta[key].sort
+    });
   } else {
     MenuList.push({
       label: routesMeta[key].name,
       path: "/Layout" + pathName,
       component: componentsList[component].default,
-      icon
+      icon,
+      sort: routesMeta[key].sort
     });
   }
 }

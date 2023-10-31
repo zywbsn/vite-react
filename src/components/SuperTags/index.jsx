@@ -3,11 +3,20 @@ import { Tag } from "antd";
 
 const SuperTags = (props) => {
   const { menu, tags } = props;
-  return tags.map((item) => (
-    <Tag color={menu.find((i) => item == i.value).color} key={item}>
-      {item}
-    </Tag>
-  ));
+  console.log(tags, "tags");
+  if (typeof tags === "string") {
+    return (
+      <Tag color={menu.find((i) => tags == i.value).color} key={tags}>
+        {tags}
+      </Tag>
+    );
+  } else {
+    return tags.map((item) => (
+      <Tag color={menu.find((i) => item == i.value).color} key={item}>
+        {item}
+      </Tag>
+    ));
+  }
 };
 
 export default SuperTags;

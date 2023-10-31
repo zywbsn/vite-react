@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "antd";
-import SuperButton from "../SuperButton/index";
+import { SuperButton, SuperForm } from "../index";
 
 const ButtonList = (props) => {
   const { buttonList, custom } = props;
@@ -13,11 +13,38 @@ const ButtonList = (props) => {
     return Items;
   }
 };
-const SuperTable = (props) => {
+const SuperTable = React.forwardRef((props, ref) => {
   const { tableConfig, leftButton } = props;
+  const searchForm = tableConfig.columns.filter((item) => item.search);
+  const search = searchForm.length > 0;
+  searchForm.map((item) => {
+    item.label = item.title;
+    item.name = item.key;
+    item.type = item.search;
+  });
+
+  const FormRef = React.useRef(null); //form 表单 ref
+
+  //请求列表
+  const getList = () => {
+    console.log("getList");
+  };
+
+  //向父组件暴露方法
+  React.useImperativeHandle(ref, () => ({ getList, FormRef }));
 
   return (
     <>
+      {search ? (
+        <SuperForm
+          ref={FormRef}
+          formItems={searchForm}
+          search={true}
+          double={false}
+          formConfig={{ colon: true }}
+        />
+      ) : null}
+
       <div className="mb-3">
         <ButtonList {...leftButton} />
       </div>
@@ -32,6 +59,6 @@ const SuperTable = (props) => {
       />
     </>
   );
-};
+});
 
 export default SuperTable;

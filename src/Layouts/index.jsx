@@ -2,14 +2,18 @@ import { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined, Html5TwoTone } from "@ant-design/icons";
 import { Layout, Menu, Button } from "antd";
 import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import menus from "../utils/GetMenusList";
+
+const menuList = menus;
 
 const { Header, Sider, Content } = Layout;
 const Layouts = () => {
   const Navigate = useNavigate();
+  const usePath = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-
+  const { pathname: defaultSelectedKeys } = usePath;
+  const defaultOpenKeys = defaultSelectedKeys.split("/").slice(0, 3).join("/"); //刷新默认展开
   const onSelectMenu = ({ key }) => {
     Navigate(key);
   };
@@ -26,8 +30,9 @@ const Layouts = () => {
             theme="light"
             mode="inline"
             className="h-[calc(100vh-64px)] overflow-auto"
-            defaultSelectedKeys={["1"]}
-            items={menus}
+            defaultOpenKeys={[defaultOpenKeys]}
+            defaultSelectedKeys={[defaultSelectedKeys]}
+            items={menuList}
             onClick={onSelectMenu}
           />
         </Sider>
@@ -49,14 +54,7 @@ const Layouts = () => {
               }}
             />
           </Header>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              height: "calc(100vh - 112px)",
-              overflow: "auto",
-              backgroundColor: "#ffffff"
-            }}>
+          <Content className="m-3 p-4 h-[calc(100vh-112px)] overflow-auto bg-[#ffffff] rounded-md">
             <Outlet />
           </Content>
         </Layout>
