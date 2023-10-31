@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined, Html5TwoTone } from "@ant-design/icons";
-import { Layout, Menu, Button, ConfigProvider, Switch, theme } from "antd";
+import { Layout, Menu, Button, ConfigProvider, Switch, theme, ColorPicker } from "antd";
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import menus from "../utils/GetMenusList";
-import colorSvg from "./colorSvg";
 import { useEffect } from "react";
 const { useToken } = theme;
 
@@ -30,23 +29,13 @@ const Layouts = () => {
     Navigate(key);
   };
 
-  const color = localStorage.getItem("primary"); //缓存主题色
-  const [primary, setPrimary] = useState(color ?? "#1677ff");
+  const primaryColor = localStorage.getItem("primary"); //缓存主题色
+  const [primary, setPrimary] = useState(primaryColor ?? "#1677ff");
   const [themeColor, setThemeColor] = useState({});
 
-  //随机颜色
-  const randomColor = () => {
-    const numbers = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += numbers[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
   //改变主题色
-  const onChangeColor = () => {
-    const color = randomColor();
+  const onChangeColor = (value) => {
+    const color = value.toHexString();
     setPrimary(color);
     localStorage.setItem("primary", color);
   };
@@ -65,17 +54,10 @@ const Layouts = () => {
   const onChange = (checked) => {
     localStorage.setItem("dark", checked);
     setDarkStatus(checked);
-    if (checked) {
-      setColorTextBase(darkColor.colorTextBase);
-      setColorBgContainer(darkColor.colorBgContainer);
-      setColorBorderSecondary(darkColor.colorBorderSecondary);
-      setThemeColor(darkColor);
-      return;
-    }
-    setThemeColor({});
-    setColorTextBase(token.colorTextBase);
-    setColorBgContainer(token.colorBgContainer);
-    setColorBorderSecondary(token.colorBorderSecondary);
+    setThemeColor(checked ? darkColor : {});
+    setColorTextBase(checked ? darkColor.colorTextBase : token.colorTextBase);
+    setColorBgContainer(checked ? darkColor.colorBgContainer : token.colorBgContainer);
+    setColorBorderSecondary(checked ? darkColor.colorBorderSecondary : token.colorBorderSecondary);
   };
 
   useEffect(() => {
@@ -118,7 +100,7 @@ const Layouts = () => {
                 backgroundColor: colorBgContainer,
                 borderBottom: `1px solid ${colorBorderSecondary}`
               }}
-              className="flex w-full">
+              className="flex w-full items-center">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -129,26 +111,7 @@ const Layouts = () => {
                   height: 64
                 }}
               />
-              <Button
-                type="text"
-                onClick={onChangeColor}
-                style={{
-                  fontSize: "16px",
-                  height: "auto",
-                  margin: 0,
-                  padding: 5
-                }}>
-                <svg
-                  t="1696172132104"
-                  viewBox="0 0 1024 1024"
-                  version="1.1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  p-id="1499"
-                  width="30"
-                  height="30">
-                  <path d={colorSvg} p-id="1500" />
-                </svg>
-              </Button>
+              <ColorPicker defaultValue={primary} onChange={onChangeColor} />
               <Switch checked={darkStatus} onChange={onChange} />
             </Header>
             <Content
@@ -162,4 +125,5 @@ const Layouts = () => {
     </>
   );
 };
+
 export default Layouts;

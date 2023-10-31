@@ -4,6 +4,16 @@ import { SuperForm, SuperTable } from "../../../components/index";
 
 const Rule = () => {
   const [open, setOpen] = useState(false); //控制弹框
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.rule === "Admin"
+    })
+  };
+
   const [dataList, setDataList] = useState([
     {
       id: 1,
@@ -16,21 +26,25 @@ const Rule = () => {
   //表格配置
   const columns = [
     {
+      align: "center",
       title: "昵称",
       dataIndex: "nickname",
       key: "nickname"
     },
     {
+      align: "center",
       title: "用户名",
       dataIndex: "username",
       key: "username"
     },
     {
+      align: "center",
       title: "权限",
       key: "rule",
       dataIndex: "rule"
     },
     {
+      align: "center",
       title: "操作",
       key: "action",
       render: (_, record) => (
@@ -96,12 +110,6 @@ const Rule = () => {
           buttonList: [
             {
               text: "新增",
-              tooltipStatus: true,
-              tooltipConfig: {
-                title: "tooltipConfig",
-                placement: "topLeft",
-                arrow: { pointAtCenter: true }
-              },
               buttonConfig: {
                 type: "primary"
               },
@@ -119,18 +127,7 @@ const Rule = () => {
         tableConfig={{
           rowKey: "id",
           columns,
-          // expandable: {
-          //   expandedRowRender: (record) => (
-          //     <p
-          //       style={{
-          //         margin: 0,
-          //       }}
-          //     >
-          //       {record.address}
-          //     </p>
-          //   ),
-          //   rowExpandable: (record) => record.address !== 'Not Expandable',
-          // },
+          rowSelection,
           dataSource: dataList
         }}
       />
