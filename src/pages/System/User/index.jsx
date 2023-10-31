@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import { Space, Modal, Button } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
+import { getUserList } from "../../../api/User/index";
 
 const Rule = () => {
   const [open, setOpen] = useState(false); //控制弹框
+
+  //获取用户列表
+  const getList = () => {
+    getUserList({ page: 1, size: 10 }).then((res) => {
+      console.log(res);
+      // setDataList(res.data);
+    });
+  };
+
+  getList();
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -104,6 +115,7 @@ const Rule = () => {
   return (
     <>
       <SuperTable
+        request={getUserList}
         search={false}
         leftButton={{
           custom: false,

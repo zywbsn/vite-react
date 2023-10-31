@@ -14,7 +14,20 @@ const ButtonList = (props) => {
   }
 };
 const SuperTable = React.forwardRef((props, ref) => {
-  const { tableConfig, leftButton } = props;
+  const [tableData, setTableData] = React.useState([]);
+  const { tableConfig, leftButton, request } = props;
+  const { dataSource } = tableConfig;
+
+  const getList = () => {
+    delete tableConfig.dataSource;
+    request({ page: 1, size: 10 }).then((res) => {
+      setTableData(res.data.list);
+    });
+  };
+
+  React.useEffect(() => {
+    request ? getList() : setTableData(dataSource);
+  }, []);
   const searchForm = tableConfig.columns.filter((item) => item.search);
   const search = searchForm.length > 0;
   searchForm.map((item) => {
@@ -24,11 +37,6 @@ const SuperTable = React.forwardRef((props, ref) => {
   });
 
   const FormRef = React.useRef(null); //form 表单 ref
-
-  //请求列表
-  const getList = () => {
-    console.log("getList");
-  };
 
   //向父组件暴露方法
   React.useImperativeHandle(ref, () => ({ getList, FormRef }));
@@ -55,6 +63,7 @@ const SuperTable = React.forwardRef((props, ref) => {
         scroll={{
           y: 500
         }}
+        dataSource={tableData}
         {...tableConfig}
       />
     </>
