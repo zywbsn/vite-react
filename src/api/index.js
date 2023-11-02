@@ -21,7 +21,6 @@ service.interceptors.request.use((config) => {
 // 添加响应拦截器
 service.interceptors.response.use(
   (response) => {
-    console.log("response", response);
     const status = response.data.status;
     if (status != 200) {
       return Promise.reject(response.data);

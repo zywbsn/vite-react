@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Space, Modal, Button, message } from "antd";
+import { Space, Modal, Button, message, Popconfirm } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
-import { createMenu, getMenuList, updateMenu } from "../../../api/Menu/index";
+import { createMenu, deleteMenu, getMenuList, updateMenu } from "../../../api/Menu/index";
 
 import { useEffect } from "react";
 const Menu = () => {
   const [menu, setMenu] = useState([]); //菜单
   const [messageApi, contextHolder] = message.useMessage(); //message 提示
   const [open, setOpen] = useState(false); //控制弹框
+  const [confirmLoading, setConfirmLoading] = useState(false); //删除加载
   const [formData, setFormData] = useState({}); //编辑数据
   const [flag, setFlag] = useState(true); //新增编辑
 
@@ -25,7 +26,7 @@ const Menu = () => {
         }
       });
 
-      setMenu([{ title: "无", value: 0 }, ...list]);
+      setMenu([{ title: "一级路由", value: 0 }, { title: "父级路由", value: 1 }, ...list]);
     });
   };
 
@@ -60,9 +61,17 @@ const Menu = () => {
           <Button type="link" onClick={() => onEdit(record)}>
             编辑
           </Button>
-          <Button danger type="link" onClick={() => onDelete(record)}>
-            删除
-          </Button>
+          <Popconfirm
+            title="警告"
+            description="是否删除该菜单 ?"
+            onConfirm={handleOk}
+            okButtonProps={{
+              loading: confirmLoading
+            }}>
+            <Button danger type="link" onClick={() => onDelete(record)}>
+              删除
+            </Button>
+          </Popconfirm>
         </Space>
       )
     }
@@ -88,7 +97,7 @@ const Menu = () => {
       placeholder: "input key"
     },
     {
-      label: "父路由",
+      label: "上级路由",
       name: "father",
       type: "treeSelect",
       placeholder: "select age",
@@ -96,10 +105,23 @@ const Menu = () => {
     }
   ];
 
+  var id = 0;
+
+  //确认删除
+  const handleOk = () => {
+    setConfirmLoading(true);
+    deleteMenu({ id }).then((response) => {
+      console.log(response);
+      messageApi.success("操作成功");
+      setConfirmLoading(false);
+      tableRef.current.getList();
+    });
+  };
+
   //删除
   const onDelete = (row) => {
     console.log(row);
-    tableRef.current.getList();
+    id = row.id;
   };
 
   //编辑
@@ -123,8 +145,7 @@ const Menu = () => {
     const query = {
       ...formData,
       ...val,
-      is_father: val.father === 0 ? 0 : 1,
-      father: val.father === 0 ? "" : val.father
+      is_father: val.father === 1 ? 1 : 0
     };
     console.log("query", query);
 
@@ -177,7 +198,8 @@ const Menu = () => {
         }}
         tableConfig={{
           rowKey: "id",
-          columns
+          columns,
+          loading: confirmLoading
           // rowSelection,
           // dataSource: dataList
         }}

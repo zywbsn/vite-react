@@ -21,7 +21,13 @@ const SuperTable = React.forwardRef((props, ref) => {
   const getList = () => {
     delete tableConfig.dataSource;
     request({ page: 1, size: 10 }).then((res) => {
-      setTableData(res.data.list);
+      const { list } = res.data;
+      list.map((item) => {
+        for (let key in item) {
+          item[key] = item[key] || "--";
+        }
+      });
+      setTableData(list);
     });
   };
 
