@@ -61,7 +61,6 @@ const Layouts = () => {
   const getList = () => {
     getMenuList({ page: -1 }).then((response) => {
       const { list } = response.data;
-      console.log("list", list);
       setMenu(list);
     });
   };

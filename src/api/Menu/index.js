@@ -1,6 +1,17 @@
 import service from "../index";
 
-export function setMenu(data) {
+//新建菜单
+export function createMenu(data) {
+  console.log("data", data);
+  return service({
+    url: "/menu/create",
+    method: "post",
+    data
+  });
+}
+
+//更新菜单
+export function updateMenu(data) {
   console.log("data", data);
   return service({
     url: "/menu/update",
@@ -9,6 +20,7 @@ export function setMenu(data) {
   });
 }
 
+//菜单列表
 export function getMenuList(data) {
   return service({
     url: "/menu/list",

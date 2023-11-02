@@ -1,12 +1,35 @@
 import React, { useState } from "react";
 import { Space, Modal, Button, message } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
-import { getMenuList, setMenu } from "../../../api/Menu/index";
+import { createMenu, getMenuList, updateMenu } from "../../../api/Menu/index";
 
+import { useEffect } from "react";
 const Menu = () => {
+  const [menu, setMenu] = useState([]); //菜单
   const [messageApi, contextHolder] = message.useMessage(); //message 提示
   const [open, setOpen] = useState(false); //控制弹框
-  const [form, setForm] = useState(null); //编辑数据
+  const [formData, setFormData] = useState({}); //编辑数据
+  const [flag, setFlag] = useState(true); //新增编辑
+
+  const getList = () => {
+    getMenuList({ page: -1 }).then((response) => {
+      const { list } = response.data;
+      list.forEach((item) => {
+        item.value = item.key;
+        item.title = item.label;
+        if (item.children) {
+          item.children.forEach((i) => {
+            i.value = i.key;
+            i.title = i.label;
+          });
+        }
+      });
+
+      setMenu([{ title: "无", value: 0 }, ...list]);
+    });
+  };
+
+  useEffect(() => getList(), []);
 
   //表格配置
   const columns = [
@@ -37,6 +60,9 @@ const Menu = () => {
           <Button type="link" onClick={() => onEdit(record)}>
             编辑
           </Button>
+          <Button danger type="link" onClick={() => onDelete(record)}>
+            删除
+          </Button>
         </Space>
       )
     }
@@ -60,18 +86,33 @@ const Menu = () => {
       label: "组件地址",
       name: "component",
       placeholder: "input key"
+    },
+    {
+      label: "父路由",
+      name: "father",
+      type: "treeSelect",
+      placeholder: "select age",
+      list: menu
     }
   ];
 
-  //编辑
-  const onEdit = (row) => {
-    setForm(row);
-    setOpen(true);
+  //删除
+  const onDelete = (row) => {
+    console.log(row);
+    tableRef.current.getList();
   };
 
+  //编辑
+  const onEdit = (row) => {
+    setFlag(false);
+    setFormData(row);
+    setOpen(true);
+  };
+  const formRef = React.useRef(null);
   //关闭弹框
   const off = () => {
-    setForm(null);
+    setFormData({});
+    formRef.current.resetFields();
     setOpen(false);
   };
 
@@ -79,16 +120,32 @@ const Menu = () => {
 
   //提交
   const onSubmit = (val) => {
-    setMenu({ ...form, ...val })
-      .then(() => {
-        messageApi.success("操作成功");
-        tableRef.current.getList();
-      })
-      .finally(() => off());
+    const query = {
+      ...formData,
+      ...val,
+      is_father: val.father === 0 ? 0 : 1,
+      father: val.father === 0 ? "" : val.father
+    };
+    console.log("query", query);
+
+    flag
+      ? createMenu(query)
+          .then(() => {
+            messageApi.success("操作成功");
+            tableRef.current.getList();
+          })
+          .finally(() => off())
+      : updateMenu(query)
+          .then(() => {
+            messageApi.success("操作成功");
+            tableRef.current.getList();
+          })
+          .finally(() => off());
   };
 
   //打开新增
   const onAdd = () => {
+    setFlag(true);
     setOpen(true);
   };
 
@@ -126,16 +183,18 @@ const Menu = () => {
         }}
       />
       <Modal
-        title="新增订单"
+        title={`${flag ? "新增" : "编辑"}菜单`}
         centered
         open={open}
         onOk={onSubmit}
         onCancel={off}
         footer={null}
+        maskClosable={false}
         width={1000}>
         <SuperForm
+          ref={formRef}
           formItems={formItems}
-          defaultData={form}
+          defaultData={formData}
           double={true}
           formConfig={{ colon: true }}
           submitMethod={onSubmit}

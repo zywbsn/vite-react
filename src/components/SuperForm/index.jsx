@@ -1,5 +1,5 @@
-import React from "react";
-import { Form, Input, Radio, Select, DatePicker } from "antd";
+import React, { useEffect } from "react";
+import { Form, Input, Radio, Select, DatePicker, Cascader, TreeSelect } from "antd";
 import { SuperButton } from "../index";
 import dayjs from "dayjs";
 
@@ -17,7 +17,11 @@ const Item = (props) => {
           span: "6"
         }}
         initialValue={
-          item.type === "radio" ? item.list[0].value : item.mode === "multiple" ? [] : ""
+          item.type === "radio" || item.type === "treeSelect"
+            ? item.list[0].value
+            : item.mode === "multiple"
+            ? []
+            : ""
         }>
         {item.type === "radio" ? (
           <Radio.Group options={item.list} />
@@ -25,6 +29,14 @@ const Item = (props) => {
           <Select mode={item.mode} placeholder={item.placeholder} options={item.list} />
         ) : item.type === "date" ? (
           <DatePicker format="YYYY-MM-DD" className="w-full" />
+        ) : item.type === "cascader" ? (
+          <Cascader placeholder={item.placeholder} options={item.list} />
+        ) : item.type === "treeSelect" ? (
+          <TreeSelect
+            // defaultValue={item.list[0].value}
+            placeholder={item.placeholder}
+            treeData={item.list}
+          />
         ) : (
           <Input placeholder={item.placeholder} />
         )}
@@ -37,10 +49,10 @@ const SuperForm = React.forwardRef((props, ref) => {
   const [form] = Form.useForm();
   const { formItems, formConfig, search, double, submitMethod, leftBtn, rightBtn, defaultData } =
     props;
-  console.log("defaultData", defaultData);
-  if (defaultData) {
+
+  useEffect(() => {
     form.setFieldsValue(defaultData);
-  }
+  }, [defaultData]);
 
   //按钮列表
   const btnList = [
@@ -83,11 +95,13 @@ const SuperForm = React.forwardRef((props, ref) => {
       }
     });
     submitMethod(values); //传给父组件
+    form.resetFields();
   };
 
   //重置表单
   const onReset = () => {
-    form.resetFields();
+    console.log("onReset", defaultData);
+    form.setFieldsValue(defaultData);
   };
 
   return (
@@ -134,34 +148,6 @@ const SuperForm = React.forwardRef((props, ref) => {
         </div>
       )}
     </>
-    // <>
-    //   <Form
-    //     form={form}
-    //     labelCol={{
-    //       span: search ? 6 : 4,
-    //     }}
-    //     wrapperCol={{
-    //       span: search ? 24 : 24,
-    //     }}
-    //     {...formConfig}
-    //     // className={search ? "flex flex-wrap" : ""}
-    //     style={!double || {
-    //       display: "flex",
-    //       flexWrap: "wrap",
-    //       width: "100%"
-    //     }}
-
-    //   >
-    //     <Item items={formItems} search={search} />
-    //   </Form>
-    //   <div className={double ? "w-full text-right" : "w-1/2 text-right"}>
-    //     {btnList.map((item) => (
-    //       <React.Fragment key={item.text}>
-    //         <SuperButton {...item} />
-    //       </React.Fragment>
-    //     ))}
-    //   </div>
-    // </>
   );
 });
 
