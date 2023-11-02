@@ -18,9 +18,11 @@ const SuperTable = React.forwardRef((props, ref) => {
   const { tableConfig, leftButton, request } = props;
   const { dataSource } = tableConfig;
 
-  const getList = () => {
+  const listQuery = { page: 1, size: 10 };
+
+  const getList = (query) => {
     delete tableConfig.dataSource;
-    request({ page: 1, size: 10 }).then((res) => {
+    request({ ...listQuery, ...query }).then((res) => {
       const { list } = res.data;
       list.map((item) => {
         for (let key in item) {
@@ -53,7 +55,7 @@ const SuperTable = React.forwardRef((props, ref) => {
         <SuperForm
           ref={FormRef}
           formItems={searchForm}
-          search={true}
+          search={getList}
           double={false}
           formConfig={{ colon: true }}
         />

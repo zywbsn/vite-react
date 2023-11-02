@@ -38,13 +38,15 @@ const Menu = () => {
       align: "center",
       title: "菜单名称",
       dataIndex: "label",
-      key: "label"
+      key: "label",
+      search: "input"
     },
     {
       align: "center",
       title: "路径",
       dataIndex: "key",
-      key: "key"
+      key: "key",
+      search: "input"
     },
     {
       align: "center",

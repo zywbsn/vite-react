@@ -84,6 +84,7 @@ const SuperForm = React.forwardRef((props, ref) => {
       }
     });
     console.log("values", values);
+    search(values);
   };
 
   //提交表单
