@@ -1,48 +1,32 @@
 import React, { useState } from "react";
-import { Space, Modal, Button } from "antd";
+import { Space, Modal, Button, message } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
-import { getUserList } from "../../../api/User/index";
+import { getMenuList, setMenu } from "../../../api/Menu/index";
 
-const Rule = () => {
+const Menu = () => {
+  const [messageApi, contextHolder] = message.useMessage(); //message 提示
   const [open, setOpen] = useState(false); //控制弹框
-
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
-    },
-    getCheckboxProps: (record) => ({
-      disabled: record.rule === "Admin"
-    })
-  };
-
-  const [dataList, setDataList] = useState([
-    {
-      id: 1,
-      nickname: "silence lamb",
-      username: "admin",
-      rule: "Admin"
-    }
-  ]); //表格数据
+  const [form, setForm] = useState(null); //编辑数据
 
   //表格配置
   const columns = [
     {
       align: "center",
-      title: "昵称",
-      dataIndex: "nickname",
-      key: "nickname"
+      title: "菜单名称",
+      dataIndex: "label",
+      key: "label"
     },
     {
       align: "center",
-      title: "用户名",
-      dataIndex: "username",
-      key: "username"
+      title: "路径",
+      dataIndex: "key",
+      key: "key"
     },
     {
       align: "center",
-      title: "权限",
-      key: "rule",
-      dataIndex: "rule"
+      title: "组件地址",
+      key: "component",
+      dataIndex: "component"
     },
     {
       align: "center",
@@ -50,8 +34,8 @@ const Rule = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button disabled={record.mark === "admin"} type="link">
-            编辑信息
+          <Button type="link" onClick={() => onEdit(record)}>
+            编辑
           </Button>
         </Space>
       )
@@ -61,40 +45,46 @@ const Rule = () => {
   //表单配置
   const formItems = [
     {
-      label: "昵称",
-      name: "nickname",
+      label: "菜单名称",
+      name: "label",
       placeholder: "input key",
       rules: [{ required: true, message: "input" }]
     },
     {
-      label: "账号",
-      name: "username",
+      label: "路径",
+      name: "key",
       placeholder: "input name",
       rules: [{ required: true, message: "input" }]
     },
     {
-      label: "权限",
-      name: "rule",
-      type: "select",
-      mode: "multiple",
-      rules: [{ required: true, message: "select" }],
-      list: [
-        { value: "loser", label: "loser" },
-        { value: "cool", label: "cool" },
-        { value: "teacher", label: "teacher" }
-      ]
+      label: "组件地址",
+      name: "component",
+      placeholder: "input key"
     }
   ];
 
+  //编辑
+  const onEdit = (row) => {
+    setForm(row);
+    setOpen(true);
+  };
+
   //关闭弹框
   const off = () => {
+    setForm(null);
     setOpen(false);
   };
 
+  const tableRef = React.useRef(null);
+
   //提交
   const onSubmit = (val) => {
-    setDataList([val, ...dataList]);
-    off();
+    setMenu({ ...form, ...val })
+      .then(() => {
+        messageApi.success("操作成功");
+        tableRef.current.getList();
+      })
+      .finally(() => off());
   };
 
   //打开新增
@@ -104,8 +94,10 @@ const Rule = () => {
 
   return (
     <>
+      {contextHolder}
       <SuperTable
-        request={getUserList}
+        ref={tableRef}
+        request={getMenuList}
         search={false}
         leftButton={{
           custom: false,
@@ -128,9 +120,9 @@ const Rule = () => {
         }}
         tableConfig={{
           rowKey: "id",
-          columns,
-          rowSelection,
-          dataSource: dataList
+          columns
+          // rowSelection,
+          // dataSource: dataList
         }}
       />
       <Modal
@@ -143,6 +135,7 @@ const Rule = () => {
         width={1000}>
         <SuperForm
           formItems={formItems}
+          defaultData={form}
           double={true}
           formConfig={{ colon: true }}
           submitMethod={onSubmit}
@@ -161,4 +154,4 @@ const Rule = () => {
   );
 };
 
-export default Rule;
+export default Menu;

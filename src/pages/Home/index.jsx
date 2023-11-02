@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HomeOutlined } from "@ant-design/icons";
 import SuperButton from "../../components/SuperButton/index";
 import SuperForm from "../../components/SuperForm/index";
@@ -10,9 +10,12 @@ const Home = () => {
     setCount(count + 1);
   };
 
+  useEffect(() => {}, []);
+
   const onSubmit = (value) => {
     setFormDate(value);
   };
+
   return (
     <>
       <div>Home</div>

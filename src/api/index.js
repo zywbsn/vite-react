@@ -5,7 +5,8 @@ const service = axios.create({
   baseURL: "/api",
   timeout: 5000,
   headers: {
-    "Content-Type": "application/form-data;charset=UTF-8"
+    // "Content-Type": "application/form-data;charset=UTF-8"
+    "Content-Type": "application/json;charset=UTF-8"
   }
 });
 
@@ -20,8 +21,9 @@ service.interceptors.request.use((config) => {
 // 添加响应拦截器
 service.interceptors.response.use(
   (response) => {
-    const code = response.data.code;
-    if (code != 200) {
+    console.log("response", response);
+    const status = response.data.status;
+    if (status != 200) {
       return Promise.reject(response.data);
     }
     return response.data;

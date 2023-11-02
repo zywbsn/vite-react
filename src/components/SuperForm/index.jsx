@@ -35,7 +35,12 @@ const Item = (props) => {
 
 const SuperForm = React.forwardRef((props, ref) => {
   const [form] = Form.useForm();
-  const { formItems, formConfig, search, double, submitMethod, leftBtn, rightBtn } = props;
+  const { formItems, formConfig, search, double, submitMethod, leftBtn, rightBtn, defaultData } =
+    props;
+  console.log("defaultData", defaultData);
+  if (defaultData) {
+    form.setFieldsValue(defaultData);
+  }
 
   //按钮列表
   const btnList = [

@@ -14,7 +14,7 @@ export default () => {
           <Route path="/Layout" element={<Layouts />}>
             {MenuList.map((item) => {
               if (item.component)
-                return <Route key={item.path} path={item.path} element={<item.component />} />;
+                return <Route key={item.key} path={item.key} element={<item.component />} />;
             })}
           </Route>
         </Routes>

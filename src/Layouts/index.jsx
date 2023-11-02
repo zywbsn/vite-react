@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined, Html5TwoTone } from "@ant-design/icons";
 import { Layout, Menu, Button, ConfigProvider, Switch, theme, ColorPicker } from "antd";
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import menus from "../utils/GetMenusList";
-import { useEffect } from "react";
+import { getMenuList } from "../api/Menu";
 const { useToken } = theme;
-
-const menuList = menus;
 
 const { Header, Sider, Content } = Layout;
 
@@ -15,6 +12,7 @@ const Layouts = () => {
   const { token } = useToken();
   const Navigate = useNavigate();
   const usePath = useLocation();
+  const [menu, setMenu] = useState([]); //菜单
   const [colorTextBase, setColorTextBase] = useState(token.colorTextBase);
   const [colorBgContainer, setColorBgContainer] = useState(token.colorBgContainer);
   const [colorBorderSecondary, setColorBorderSecondary] = useState(token.colorBorderSecondary);
@@ -60,7 +58,16 @@ const Layouts = () => {
     setColorBorderSecondary(checked ? darkColor.colorBorderSecondary : token.colorBorderSecondary);
   };
 
+  const getList = () => {
+    getMenuList({ page: -1 }).then((response) => {
+      const { list } = response.data;
+      console.log("list", list);
+      setMenu(list);
+    });
+  };
+
   useEffect(() => {
+    getList();
     onChange(darkStatus);
   }, []);
 
@@ -89,7 +96,7 @@ const Layouts = () => {
               className="h-[calc(100vh-64px)] overflow-auto"
               defaultOpenKeys={[defaultOpenKeys]}
               defaultSelectedKeys={[defaultSelectedKeys]}
-              items={menuList}
+              items={menu}
               onClick={onSelectMenu}
             />
           </Sider>
