@@ -8,7 +8,7 @@ const WaveChart = () => {
   const { token } = useToken();
   const option = {
     title: {
-      text: token.colorBgContainer
+      text: "海浪图"
     },
     series: [
       {
