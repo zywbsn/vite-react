@@ -139,18 +139,20 @@ const SuperForm = React.forwardRef((props, ref) => {
               }}
               methods={{ onClick: () => onSearch() }}
             />
-            <SuperButton
-              text={flag ? "展开" : "收起"}
-              buttonConfig={{
-                type: "text",
-                icon: flag ? (
-                  <CaretDownOutlined style={{ fontSize: "14px" }} />
-                ) : (
-                  <CaretUpOutlined style={{ fontSize: "14px" }} />
-                )
-              }}
-              methods={{ onClick: () => setFlag(!flag) }}
-            />
+            {formItems.length > 3 ? (
+              <SuperButton
+                text={flag ? "展开" : "收起"}
+                buttonConfig={{
+                  type: "text",
+                  icon: flag ? (
+                    <CaretDownOutlined style={{ fontSize: "14px" }} />
+                  ) : (
+                    <CaretUpOutlined style={{ fontSize: "14px" }} />
+                  )
+                }}
+                methods={{ onClick: () => setFlag(!flag) }}
+              />
+            ) : null}
           </Form.Item>
         ) : null}
       </Form>

@@ -17,7 +17,6 @@ const ButtonList = (props) => {
 };
 const SuperTable = React.forwardRef((props, ref) => {
   const { token } = useToken();
-  console.log("token", token);
   const [tableData, setTableData] = React.useState([]);
   const { tableConfig, leftButton, request } = props;
   const { dataSource } = tableConfig;
@@ -63,19 +62,20 @@ const SuperTable = React.forwardRef((props, ref) => {
 
   return (
     <>
-      <div
-        className="p-3 pb-0 r rounded-md h-auto mb-3"
-        style={{ backgroundColor: token.colorBgContainer }}>
-        {search ? (
+      {search ? (
+        <div
+          className="p-3 pb-0 r rounded-md h-auto mb-3"
+          style={{ backgroundColor: token.colorBgContainer }}>
           <SuperForm
             ref={FormRef}
             formItems={searchForm}
             search={getList}
             double={false}
             formConfig={{ colon: true }}
-          />
-        ) : null}
-      </div>
+          />{" "}
+        </div>
+      ) : null}
+
       <div
         className="p-3 pb-0 r rounded-md h-[calc(100%-68px)]"
         style={{
