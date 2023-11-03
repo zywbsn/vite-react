@@ -17,7 +17,7 @@ const WaveChart = () => {
         z: 6,
         center: ["50%", "50%"],
         color: ["#c1dce7", "#90d3f0", "#009bdb"],
-        data: [0.6, 0.4, 0.3],
+        data: [0.8, 0.7, 0.6],
         backgroundStyle: {
           color: "transparent"
         },
