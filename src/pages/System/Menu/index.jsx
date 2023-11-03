@@ -126,7 +126,6 @@ const Menu = () => {
   const handleOk = () => {
     setConfirmLoading(true);
     deleteMenu({ id }).then((response) => {
-      console.log(response);
       messageApi.success("操作成功");
       setConfirmLoading(false);
       tableRef.current.getList();
@@ -135,7 +134,6 @@ const Menu = () => {
 
   //删除
   const onDelete = (row) => {
-    console.log(row);
     id = row.id;
   };
 
@@ -162,7 +160,6 @@ const Menu = () => {
       ...val,
       is_father: val.father === 1 ? 1 : 0
     };
-    console.log("query", query);
 
     flag
       ? createMenu(query)
@@ -200,13 +197,6 @@ const Menu = () => {
                 type: "primary"
               },
               methods: { onClick: () => onAdd() }
-            },
-            {
-              text: "SuperButton2",
-              buttonConfig: {
-                type: "primary"
-              },
-              methods: { onClick: () => console.log("SuperButton2") }
             }
           ]
         }}
