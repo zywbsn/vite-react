@@ -57,6 +57,12 @@ const Menu = () => {
     },
     {
       align: "center",
+      title: "排序",
+      key: "sort",
+      dataIndex: "sort"
+    },
+    {
+      align: "center",
       title: "操作",
       key: "action",
       render: (_, record) => (
@@ -105,6 +111,12 @@ const Menu = () => {
       type: "treeSelect",
       placeholder: "select age",
       list: menu
+    },
+    {
+      label: "排序",
+      name: "sort",
+      type: "input",
+      placeholder: "请输入"
     }
   ];
 
@@ -179,7 +191,6 @@ const Menu = () => {
       <SuperTable
         ref={tableRef}
         request={getMenuList}
-        search={false}
         leftButton={{
           custom: false,
           buttonList: [

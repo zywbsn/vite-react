@@ -8,11 +8,11 @@ let MenuList = [];
 
 for (const key in componentsList) {
   let pathName = key.replace("../pages", "").replace("/index.jsx", "");
-  const component = key.replace("router.jsx", "index.jsx");
+  const component = key;
   MenuList.push({
     key: "/Layout" + pathName,
     component: componentsList[component].default
   });
 }
-
+// console.log("路由", MenuList);
 export default MenuList;
