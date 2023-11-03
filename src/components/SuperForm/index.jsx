@@ -1,12 +1,20 @@
 import React, { useEffect } from "react";
 import { Form, Input, Radio, Select, DatePicker, Cascader, TreeSelect } from "antd";
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { SuperButton } from "../index";
 import dayjs from "dayjs";
 
 const Item = (props) => {
-  const { items } = props;
-  return items.map((item) => {
-    return (
+  const { items, search, flag } = props;
+
+  return items.map((item, index) => {
+    if (flag && search && index > 2) {
+      return null;
+    }
+    const space = JSON.stringify(item) === "{}";
+    return space ? (
+      <Form.Item />
+    ) : (
       <Form.Item
         key={item.name}
         label={item.label}
@@ -46,6 +54,7 @@ const Item = (props) => {
 };
 
 const SuperForm = React.forwardRef((props, ref) => {
+  const [flag, setFlag] = React.useState(true);
   const [form] = Form.useForm();
   const { formItems, formConfig, search, double, submitMethod, leftBtn, rightBtn, defaultData } =
     props;
@@ -110,15 +119,9 @@ const SuperForm = React.forwardRef((props, ref) => {
       <Form
         ref={ref}
         form={form}
-        labelCol={{
-          span: search ? 6 : 4
-        }}
-        wrapperCol={{
-          span: search ? 24 : 24
-        }}
         {...formConfig}
         className={double ? `grid grid-cols-2 gap-x-4` : "grid grid-cols-4"}>
-        <Item items={formItems} />
+        <Item flag={flag} search={search ? true : search} items={formItems} />
         {search ? (
           <Form.Item>
             <SuperButton
@@ -135,6 +138,18 @@ const SuperForm = React.forwardRef((props, ref) => {
                 type: "default"
               }}
               methods={{ onClick: () => onSearch() }}
+            />
+            <SuperButton
+              text={flag ? "展开" : "收起"}
+              buttonConfig={{
+                type: "text",
+                icon: flag ? (
+                  <CaretDownOutlined style={{ fontSize: "14px" }} />
+                ) : (
+                  <CaretUpOutlined style={{ fontSize: "14px" }} />
+                )
+              }}
+              methods={{ onClick: () => setFlag(!flag) }}
             />
           </Form.Item>
         ) : null}

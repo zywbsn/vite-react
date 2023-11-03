@@ -41,7 +41,7 @@ const Layouts = () => {
   //暗黑模式
   const darkColor = {
     colorTextBase: "#D2D2D2", //用于派生文本色梯度的基础变量，v5 中我们添加了一层文本色的派生算法可以产出梯度明确的文本色的梯度变量
-    colorBgLayout: "#000000", //该色用于页面整体布局的背景色，只有需要在页面中处于 B1 的视觉层级时才会使用该 token，其他用法都是错误的
+    colorBgLayout: "#333333", //该色用于页面整体布局的背景色，只有需要在页面中处于 B1 的视觉层级时才会使用该 token，其他用法都是错误的
     colorBgElevated: "#1F1F1F", //浮层容器背景色，在暗色模式下该 token 的色值会比 `colorBgContainer` 要亮一些。例如：模态框、弹出框、菜单等。
     colorBorder: "#313131", //默认使用的边框颜色, 用于分割不同的元素，例如：表单的分割线、卡片的分割线等。
     colorBorderSecondary: "#313131", //比默认使用的边框色要浅一级，此颜色和 colorSplit 的颜色一致。使用的是实色。
@@ -77,6 +77,14 @@ const Layouts = () => {
           token: {
             colorPrimary: primary,
             ...themeColor
+          },
+          components: {
+            Form: {
+              itemMarginBottom: "12px"
+            }
+            // Pagination: {
+            //   /* here is your component tokens */
+            // },
           }
         }}>
         <Layout>
@@ -106,7 +114,7 @@ const Layouts = () => {
                 backgroundColor: colorBgContainer,
                 borderBottom: `1px solid ${colorBorderSecondary}`
               }}
-              className="flex w-full items-center">
+              className="flex w-full items-center h-[60px]">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -120,9 +128,9 @@ const Layouts = () => {
               <ColorPicker defaultValue={primary} onChange={onChangeColor} />
               <Switch checked={darkStatus} onChange={onChange} />
             </Header>
-            <Content
-              className="m-3 p-4 h-[calc(100vh-112px)] overflow-auto rounded-md"
-              style={{ backgroundColor: colorBgContainer }}>
+            <Content className="m-3 h-[calc(100vh-112px)]">
+              {/*  overflow-auto */}
+              {/* style={{ backgroundColor: colorBgContainer }} */}
               <Outlet />
             </Content>
           </Layout>

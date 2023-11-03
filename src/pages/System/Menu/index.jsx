@@ -36,6 +36,41 @@ const Menu = () => {
   const columns = [
     {
       align: "center",
+      title: "组件地址",
+      key: "compo1ne11nt",
+      dataIndex: "component",
+      search: "input"
+    },
+    {
+      align: "center",
+      title: "组件地址",
+      key: "compo1ne11nt",
+      dataIndex: "component",
+      search: "input"
+    },
+    {
+      align: "center",
+      title: "组件地址",
+      key: "compo1ne11nt",
+      dataIndex: "component",
+      search: "input"
+    },
+    {
+      align: "center",
+      title: "组件地址",
+      key: "compo1nent",
+      dataIndex: "component",
+      search: "input"
+    },
+    {
+      align: "center",
+      title: "组件地址",
+      key: "comp2onent",
+      dataIndex: "component",
+      search: "input"
+    },
+    {
+      align: "center",
       title: "菜单名称",
       dataIndex: "label",
       key: "label",
@@ -52,7 +87,8 @@ const Menu = () => {
       align: "center",
       title: "组件地址",
       key: "component",
-      dataIndex: "component"
+      dataIndex: "component",
+      search: "input"
     },
     {
       align: "center",
