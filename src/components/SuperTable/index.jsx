@@ -29,7 +29,7 @@ const SuperTable = React.forwardRef((props, ref) => {
       const { list } = res.data;
       list.map((item) => {
         for (let key in item) {
-          item[key] = item[key] || "--";
+          item[key] = item[key] ?? "--";
         }
       });
       setTableData(list);
@@ -49,6 +49,7 @@ const SuperTable = React.forwardRef((props, ref) => {
       }
     }
   }
+  console.log("searchForm", searchForm);
   searchForm.map((item) => {
     item.label = item.title;
     item.name = item.key;
@@ -72,7 +73,7 @@ const SuperTable = React.forwardRef((props, ref) => {
             search={getList}
             double={false}
             formConfig={{ colon: true }}
-          />{" "}
+          />
         </div>
       ) : null}
 

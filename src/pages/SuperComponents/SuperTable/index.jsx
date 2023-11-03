@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Space, Modal } from "antd";
 import { SuperForm, SuperTable, SuperTags } from "../../../components/index";
 
-const SuperTableIndex = () => {
+const SuperTablePage = () => {
   const [open, setOpen] = useState(false); //控制弹框
 
   const tagsList = [
@@ -264,4 +264,4 @@ const SuperTableIndex = () => {
   );
 };
 
-export default SuperTableIndex;
+export default SuperTablePage;
