@@ -11,7 +11,7 @@ export default () => {
       <BrowserRouter>
         <Routes>
           {/* 路由重定向 */}
-          <Route path="/" exact element={<Navigate to="/Login" />} />
+          <Route path="/" element={<Navigate to="/Login" />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Layout" element={<Layouts />}>
             {MenuList.map((item) => {
