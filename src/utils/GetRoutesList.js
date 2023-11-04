@@ -11,8 +11,9 @@ for (const key in componentsList) {
   const component = key;
   MenuList.push({
     key: "/Layout" + pathName,
+    // key: pathName,
     component: componentsList[component].default
   });
 }
-// console.log("路由", MenuList);
+console.log("路由", MenuList);
 export default MenuList;
