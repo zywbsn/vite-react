@@ -72,7 +72,7 @@ const Menu = () => {
           </Button>
           <Popconfirm
             title="警告"
-            description="是否删除该菜单 ?"
+            description={`是否删除菜单 ${record.label} ?`}
             onConfirm={handleOk}
             okButtonProps={{
               loading: confirmLoading

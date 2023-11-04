@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Space, Modal, Button, message } from "antd";
+import { Space, Modal, Button, message, Popconfirm } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
-import { getUserList, createUser, updateUser } from "../../../api/User/index";
+import { getUserList, createUser, updateUser, deleteUser } from "../../../api/User/index";
 import { getMenuList } from "../../../api/Menu";
 
 const User = () => {
@@ -9,6 +9,7 @@ const User = () => {
   const [menu, setMenu] = useState([]); //菜单
   const [formData, setFormData] = useState({}); //编辑数据
   const [flag, setFlag] = useState(true); //新增编辑
+  const [confirmLoading, setConfirmLoading] = useState(false); //删除加载
 
   const [messageApi, contextHolder] = message.useMessage(); //message 提示
 
@@ -72,10 +73,36 @@ const User = () => {
           <Button type="link" onClick={() => onEdit(record)}>
             编辑
           </Button>
+          <Popconfirm
+            title="警告"
+            description={`是否删除用户 ${record.nickname} ?`}
+            onConfirm={handleOk}
+            okButtonProps={{
+              loading: confirmLoading
+            }}>
+            <Button danger type="link" onClick={() => onDelete(record)}>
+              删除
+            </Button>
+          </Popconfirm>
         </Space>
       )
     }
   ];
+  var id = 0;
+
+  //删除
+  const onDelete = (row) => {
+    id = row.id;
+  };
+  //确认删除
+  const handleOk = () => {
+    setConfirmLoading(true);
+    deleteUser({ id }).then((response) => {
+      messageApi.success("操作成功");
+      setConfirmLoading(false);
+      tableRef.current.getList();
+    });
+  };
 
   //表单配置
   const formItems = [
@@ -184,6 +211,7 @@ const User = () => {
         tableConfig={{
           rowKey: "id",
           columns,
+          loading: confirmLoading,
           rowSelection
         }}
       />
