@@ -14,7 +14,7 @@ const Item = (props) => {
     const space = JSON.stringify(item) === "{}";
     return space ? (
       <Form.Item />
-    ) : (
+    ) : !item.empty ? (
       <Form.Item
         key={item.name}
         label={item.label}
@@ -34,21 +34,27 @@ const Item = (props) => {
         {item.type === "radio" ? (
           <Radio.Group options={item.list} />
         ) : item.type === "select" ? (
-          <Select mode={item.mode} placeholder={item.placeholder} options={item.list} />
+          <Select mode={item.mode} placeholder={item.placeholder ?? "请选择"} options={item.list} />
         ) : item.type === "date" ? (
-          <DatePicker format="YYYY-MM-DD" className="w-full" />
+          <DatePicker
+            placeholder={item.placeholder ?? "请选择"}
+            format="YYYY-MM-DD"
+            className="w-full"
+          />
         ) : item.type === "cascader" ? (
-          <Cascader placeholder={item.placeholder} options={item.list} />
+          <Cascader placeholder={item.placeholder ?? "请选择"} options={item.list} />
         ) : item.type === "treeSelect" ? (
           <TreeSelect
             // defaultValue={item.list[0].value}
-            placeholder={item.placeholder}
+            placeholder={item.placeholder ?? "请选择"}
             treeData={item.list}
           />
         ) : (
-          <Input placeholder={item.placeholder} />
+          <Input placeholder={item.placeholder ?? "请输入"} />
         )}
       </Form.Item>
+    ) : (
+      <Form.Item key={item.key} />
     );
   });
 };
@@ -92,7 +98,6 @@ const SuperForm = React.forwardRef((props, ref) => {
         values[item.name] = dayjs(values[item.name].$d).format("YYYY-MM-DD");
       }
     });
-    console.log("values", values);
     search(values);
   };
 
@@ -110,7 +115,6 @@ const SuperForm = React.forwardRef((props, ref) => {
 
   //重置表单
   const onReset = () => {
-    console.log("onReset", defaultData);
     form.setFieldsValue(defaultData);
   };
 

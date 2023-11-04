@@ -15,34 +15,27 @@ const Rule = () => {
     })
   };
 
-  const [dataList, setDataList] = useState([
-    {
-      id: 1,
-      nickname: "silence lamb",
-      username: "admin",
-      rule: "Admin"
-    }
-  ]); //表格数据
-
   //表格配置
   const columns = [
-    {
-      align: "center",
-      title: "昵称",
-      dataIndex: "nickname",
-      key: "nickname"
-    },
+    // {
+    //   align: "center",
+    //   title: "昵称",
+    //   dataIndex: "nickname",
+    //   key: "nickname",
+    //   search: "input"
+    // },
     {
       align: "center",
       title: "用户名",
       dataIndex: "username",
-      key: "username"
+      key: "username",
+      search: "input"
     },
     {
       align: "center",
       title: "权限",
-      key: "rule",
-      dataIndex: "rule"
+      dataIndex: "rule",
+      key: "rule"
     },
     {
       align: "center",
@@ -93,7 +86,6 @@ const Rule = () => {
 
   //提交
   const onSubmit = (val) => {
-    setDataList([val, ...dataList]);
     off();
   };
 
@@ -116,21 +108,20 @@ const Rule = () => {
                 type: "primary"
               },
               methods: { onClick: () => onAdd() }
-            },
-            {
-              text: "SuperButton2",
-              buttonConfig: {
-                type: "primary"
-              },
-              methods: { onClick: () => console.log("SuperButton2") }
             }
+            // {
+            //   text: "SuperButton2",
+            //   buttonConfig: {
+            //     type: "primary"
+            //   },
+            //   methods: { onClick: () => console.log("SuperButton2") }
+            // }
           ]
         }}
         tableConfig={{
           rowKey: "id",
           columns,
-          rowSelection,
-          dataSource: dataList
+          rowSelection
         }}
       />
       <Modal

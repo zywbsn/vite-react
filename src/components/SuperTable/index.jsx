@@ -40,21 +40,21 @@ const SuperTable = React.forwardRef((props, ref) => {
     request ? getList() : setTableData(dataSource);
   }, []);
   const searchForm = tableConfig.columns.filter((item) => item.search);
-  const search = searchForm.length > 0;
-  if (search) {
-    const itemNum = searchForm.length % 4;
-    if (itemNum !== 3) {
-      for (let index = 0; index < 3 - itemNum; index++) {
-        searchForm.push({});
-      }
-    }
-  }
-  console.log("searchForm", searchForm);
+
   searchForm.map((item) => {
     item.label = item.title;
     item.name = item.key;
     item.type = item.search;
   });
+  const search = searchForm.length > 0;
+  if (search) {
+    const itemNum = searchForm.length % 4;
+    if (itemNum !== 3) {
+      for (let index = 0; index < 3 - itemNum; index++) {
+        searchForm.push({ empty: true, key: index });
+      }
+    }
+  }
 
   const FormRef = React.useRef(null); //form 表单 ref
 
