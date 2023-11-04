@@ -107,7 +107,7 @@ const Rule = () => {
       label: "权限内容",
       name: "content",
       type: "select",
-      mode: "multiple",
+      config: { mode: "multiple" },
       rules: [{ required: true, message: "select" }],
       list: [
         { value: "loser", label: "loser" },

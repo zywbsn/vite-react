@@ -25,32 +25,39 @@ const Item = (props) => {
           span: "6"
         }}
         initialValue={
-          item.type === "radio" || item.type === "treeSelect"
+          item.type === "radio"
             ? item.list[0].value
-            : item.mode === "multiple"
+            : item.type === "treeSelect" && !item.config?.treeCheckable
+            ? item.list[0].value
+            : item.config?.mode === "multiple" || item.config?.treeCheckable
             ? []
             : ""
         }>
         {item.type === "radio" ? (
-          <Radio.Group options={item.list} />
+          <Radio.Group {...item.config} options={item.list} />
         ) : item.type === "select" ? (
-          <Select mode={item.mode} placeholder={item.placeholder ?? "请选择"} options={item.list} />
+          <Select {...item.config} placeholder={item.placeholder ?? "请选择"} options={item.list} />
         ) : item.type === "date" ? (
           <DatePicker
+            {...item.config}
             placeholder={item.placeholder ?? "请选择"}
             format="YYYY-MM-DD"
             className="w-full"
           />
         ) : item.type === "cascader" ? (
-          <Cascader placeholder={item.placeholder ?? "请选择"} options={item.list} />
+          <Cascader
+            {...item.config}
+            placeholder={item.placeholder ?? "请选择"}
+            options={item.list}
+          />
         ) : item.type === "treeSelect" ? (
           <TreeSelect
-            // defaultValue={item.list[0].value}
+            {...item.config}
             placeholder={item.placeholder ?? "请选择"}
             treeData={item.list}
           />
         ) : (
-          <Input placeholder={item.placeholder ?? "请输入"} />
+          <Input {...item.config} placeholder={item.placeholder ?? "请输入"} />
         )}
       </Form.Item>
     ) : (
