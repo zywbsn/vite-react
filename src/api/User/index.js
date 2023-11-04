@@ -2,7 +2,6 @@ import service from "../index";
 
 //新建菜单
 export function deleteUser(data) {
-  console.log("data", data);
   return service({
     url: "/user/delete",
     method: "delete",

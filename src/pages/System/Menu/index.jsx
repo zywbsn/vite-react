@@ -73,11 +73,18 @@ const Menu = () => {
           <Popconfirm
             title="警告"
             description={`是否删除菜单 ${record.label} ?`}
-            onConfirm={handleOk}
+            onConfirm={() => {
+              setConfirmLoading(true);
+              deleteMenu({ id: record.id }).then((response) => {
+                messageApi.success("操作成功");
+                setConfirmLoading(false);
+                tableRef.current.getList();
+              });
+            }}
             okButtonProps={{
               loading: confirmLoading
             }}>
-            <Button danger type="link" onClick={() => onDelete(record)}>
+            <Button danger type="link">
               删除
             </Button>
           </Popconfirm>
@@ -119,23 +126,6 @@ const Menu = () => {
       placeholder: "请输入"
     }
   ];
-
-  var id = 0;
-
-  //确认删除
-  const handleOk = () => {
-    setConfirmLoading(true);
-    deleteMenu({ id }).then((response) => {
-      messageApi.success("操作成功");
-      setConfirmLoading(false);
-      tableRef.current.getList();
-    });
-  };
-
-  //删除
-  const onDelete = (row) => {
-    id = row.id;
-  };
 
   //编辑
   const onEdit = (row) => {
@@ -203,9 +193,9 @@ const Menu = () => {
         tableConfig={{
           rowKey: "id",
           columns,
-          loading: confirmLoading
+          loading: confirmLoading,
           // rowSelection,
-          // dataSource: dataList
+          dataSource: [{ 1: 1 }]
         }}
       />
       <Modal

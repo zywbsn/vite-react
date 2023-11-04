@@ -79,13 +79,13 @@ const SuperForm = React.forwardRef((props, ref) => {
   //按钮列表
   const btnList = [
     ...(leftBtn || []),
-    {
-      text: "重置",
-      buttonConfig: {
-        type: "default"
-      },
-      methods: { onClick: () => onReset() }
-    },
+    // {
+    //   text: "重置",
+    //   buttonConfig: {
+    //     type: "default"
+    //   },
+    //   methods: { onClick: () => onReset() }
+    // },
     {
       className: "mr-0",
       text: "提交",
@@ -120,9 +120,14 @@ const SuperForm = React.forwardRef((props, ref) => {
     form.resetFields();
   };
 
+  const resetSearch = () => {
+    form.resetFields();
+    search(false);
+  };
+
   //重置表单
   const onReset = () => {
-    form.setFieldsValue(defaultData);
+    search ? resetSearch() : form.setFieldsValue(defaultData);
   };
 
   return (
@@ -148,7 +153,7 @@ const SuperForm = React.forwardRef((props, ref) => {
               buttonConfig={{
                 type: "default"
               }}
-              methods={{ onClick: () => onSearch() }}
+              methods={{ onClick: () => onReset() }}
             />
             {formItems.length > 3 ? (
               <SuperButton

@@ -16,16 +16,18 @@ const ButtonList = (props) => {
   }
 };
 const SuperTable = React.forwardRef((props, ref) => {
+  const { tableConfig, leftButton, request } = props;
   const { token } = useToken();
   const [tableData, setTableData] = React.useState([]);
-  const { tableConfig, leftButton, request } = props;
+  !request || delete tableConfig.dataSource;
   const { dataSource } = tableConfig;
 
-  const listQuery = { page: 1, size: 10 };
+  const [listQuery, setListQuery] = React.useState({ page: 1, size: 10 });
 
   const getList = (query) => {
-    delete tableConfig.dataSource;
-    request({ ...listQuery, ...query }).then((res) => {
+    const newQuery = !query ? { page: 1, size: 10 } : { ...listQuery, ...query };
+    setListQuery(newQuery);
+    request(newQuery).then((res) => {
       const { list } = res.data;
       list.map((item) => {
         for (let key in item) {
@@ -61,6 +63,11 @@ const SuperTable = React.forwardRef((props, ref) => {
   //向父组件暴露方法
   React.useImperativeHandle(ref, () => ({ getList, FormRef }));
 
+  const onChange = (page, pageSize) => {
+    console.log(page, pageSize);
+    getList({ page: page, size: pageSize });
+  };
+
   return (
     <>
       {search ? (
@@ -91,9 +98,17 @@ const SuperTable = React.forwardRef((props, ref) => {
           bordered
           size="middle"
           scroll={{
-            y: 500
+            scrollToFirstRowOnChange: true,
+            y: "100%"
           }}
           dataSource={tableData}
+          pagination={{
+            total: 12,
+            showTotal: () => `Total ${12} items`,
+            defaultPageSize: 10,
+            defaultCurrent: 1,
+            onChange
+          }}
           {...tableConfig}
         />
       </div>

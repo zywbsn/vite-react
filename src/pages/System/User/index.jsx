@@ -76,11 +76,18 @@ const User = () => {
           <Popconfirm
             title="警告"
             description={`是否删除用户 ${record.nickname} ?`}
-            onConfirm={handleOk}
+            onConfirm={() => {
+              setConfirmLoading(true);
+              deleteUser({ id: record.id }).then(() => {
+                messageApi.success("操作成功");
+                setConfirmLoading(false);
+                tableRef.current.getList();
+              });
+            }}
             okButtonProps={{
               loading: confirmLoading
             }}>
-            <Button danger type="link" onClick={() => onDelete(record)}>
+            <Button danger type="link">
               删除
             </Button>
           </Popconfirm>
@@ -88,21 +95,6 @@ const User = () => {
       )
     }
   ];
-  var id = 0;
-
-  //删除
-  const onDelete = (row) => {
-    id = row.id;
-  };
-  //确认删除
-  const handleOk = () => {
-    setConfirmLoading(true);
-    deleteUser({ id }).then((response) => {
-      messageApi.success("操作成功");
-      setConfirmLoading(false);
-      tableRef.current.getList();
-    });
-  };
 
   //表单配置
   const formItems = [
@@ -162,13 +154,13 @@ const User = () => {
       ...formData,
       ...val
     };
-    console.log(query);
     flag
-      ? createUser(val).then((response) => {
-          console.log(response);
-          messageApi.success("操作成功");
-          tableRef.current.getList();
-        })
+      ? createUser(val)
+          .then(() => {
+            messageApi.success("操作成功");
+            tableRef.current.getList();
+          })
+          .finally(() => off())
       : updateUser(query)
           .then(() => {
             messageApi.success("操作成功");
@@ -212,6 +204,12 @@ const User = () => {
           rowKey: "id",
           columns,
           loading: confirmLoading,
+          position: {
+            total: 85,
+            showTotal: (total) => `Total ${total} items`,
+            defaultPageSize: 20,
+            defaultCurrent: 1
+          },
           rowSelection
         }}
       />
