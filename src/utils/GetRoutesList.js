@@ -10,8 +10,8 @@ for (const key in componentsList) {
   let pathName = key.replace("../pages", "").replace("/index.jsx", "");
   const component = key;
   MenuList.push({
-    key: "/Layout" + pathName,
-    // key: pathName,
+    // key: "/Layout" + pathName,
+    key: pathName,
     component: componentsList[component].default
   });
 }

@@ -3,15 +3,24 @@ import { Form, Input, Radio, Select, DatePicker, Cascader, TreeSelect } from "an
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { SuperButton } from "../index";
 import dayjs from "dayjs";
-
+import SelectIcon from "../Select-Icon";
+var selectIconValue = "";
 const Item = (props) => {
   const { items, search, flag } = props;
+  const [iconValue, setIconValue] = React.useState();
 
   return items.map((item, index) => {
     if (flag && search && index > 2) {
       return null;
     }
     const space = JSON.stringify(item) === "{}";
+
+    const setValue = (value) => {
+      selectIconValue = value;
+      console.log("setValue", value);
+      setIconValue(value);
+    };
+
     return space ? (
       <Form.Item />
     ) : !item.empty ? (
@@ -56,6 +65,8 @@ const Item = (props) => {
             placeholder={item.placeholder ?? "请选择"}
             treeData={item.list}
           />
+        ) : item.type === "iconSelect" ? (
+          <SelectIcon setValue={setValue} />
         ) : (
           <Input {...item.config} placeholder={item.placeholder ?? "请输入"} />
         )}
@@ -110,13 +121,17 @@ const SuperForm = React.forwardRef((props, ref) => {
 
   //提交表单
   const onSubmit = async () => {
+    console.log("selectIconValue", selectIconValue);
     const values = await form.validateFields();
     formItems.map((item) => {
       if (item.type === "date") {
         values[item.name] = dayjs(values[item.name].$d).format("YYYY-MM-DD");
       }
     });
-    submitMethod(values); //传给父组件
+    const query = { ...values };
+    query.icon = selectIconValue;
+    console.log("query", query);
+    submitMethod(query); //传给父组件
     form.resetFields();
   };
 

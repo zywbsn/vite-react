@@ -19,6 +19,11 @@ const SuperTable = React.forwardRef((props, ref) => {
   const { tableConfig, leftButton, request } = props;
   const { token } = useToken();
   const [tableData, setTableData] = React.useState([]);
+  const [listPage, setListPage] = React.useState({
+    page: 1,
+    size: 10,
+    total: 0
+  });
   !request || delete tableConfig.dataSource;
   const { dataSource } = tableConfig;
 
@@ -27,11 +32,17 @@ const SuperTable = React.forwardRef((props, ref) => {
   const getList = (query) => {
     const newQuery = !query ? { page: 1, size: 10 } : { ...listQuery, ...query };
     setListQuery(newQuery);
-    request(newQuery).then((res) => {
-      const { list } = res.data;
+    request(newQuery).then((response) => {
+      const { list, page = 1, size = 10, total = 0 } = response.data;
+      setListPage({
+        page,
+        size,
+        total
+      });
       list.map((item) => {
         for (let key in item) {
-          item[key] = item[key] ?? "--";
+          if (key === "icon") return;
+          item[key] = item[key] === 0 || !item[key] ? "--" : item[key];
         }
       });
       setTableData(list);
@@ -103,10 +114,10 @@ const SuperTable = React.forwardRef((props, ref) => {
           }}
           dataSource={tableData}
           pagination={{
-            total: 12,
-            showTotal: () => `Total ${12} items`,
-            defaultPageSize: 10,
-            defaultCurrent: 1,
+            total: listPage.total,
+            showTotal: () => `共 ${listPage.total} 条`,
+            defaultPageSize: listPage.size,
+            defaultCurrent: listPage.page,
             onChange
           }}
           {...tableConfig}

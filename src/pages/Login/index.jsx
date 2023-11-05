@@ -15,7 +15,11 @@ const LoginPage = () => {
   const onLogin = async () => {
     const values = await form.validateFields();
     Login(values).then((response) => {
-      if (response.data.id) Navigate("/Layout/Home", { replace: true });
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user_info", JSON.stringify(response.data.info));
+        Navigate("/Home", { replace: true });
+      }
     });
   };
 

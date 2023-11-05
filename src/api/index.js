@@ -1,4 +1,7 @@
 import axios from "axios";
+import { CheckStatus } from "./checkStatus";
+
+var requestStatus = true;
 
 //创建 axios 实例
 const service = axios.create({
@@ -7,6 +10,7 @@ const service = axios.create({
   headers: {
     // "Content-Type": "application/form-data;charset=UTF-8"
     "Content-Type": "application/json;charset=UTF-8"
+    // authorization: localStorage.getItem("token") || ""
   }
 });
 
@@ -22,13 +26,18 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use(
   (response) => {
     const status = response.data.status;
-    if (status != 200) {
-      return Promise.reject(response.data);
+    if (status !== 200) {
+      !requestStatus || CheckStatus(status);
+      requestStatus = false;
+      return;
     }
+    requestStatus = true;
     return response.data;
   },
   (error) => {
-    console.log("error", error);
+    !requestStatus || CheckStatus(error.response.status);
+    requestStatus = false;
+    return error.response.data;
   }
 );
 

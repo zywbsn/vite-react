@@ -1,9 +1,14 @@
 import React from "react";
 import { ECharts } from "../../components";
-import { theme } from "antd";
+import { theme, Button, message } from "antd";
+import SelectIcon from "../../components/Select-Icon";
+
 const { useToken } = theme;
 const Home = () => {
   const { token } = useToken();
+  const info = () => {
+    message.info("This is a normal message");
+  };
   const option = {
     graphic: {
       elements: [
@@ -55,6 +60,10 @@ const Home = () => {
   return (
     <>
       <div className="main" style={{ backgroundColor: token.colorBgContainer }}>
+        <SelectIcon />
+        <Button type="primary" onClick={info}>
+          Static Method
+        </Button>
         <ECharts option={option} />
       </div>
     </>

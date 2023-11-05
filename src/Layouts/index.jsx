@@ -4,6 +4,9 @@ import { Layout, Menu, Button, ConfigProvider, Switch, theme, ColorPicker } from
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getMenuList } from "../api/Menu";
+import Icon from "@ant-design/icons";
+import * as icons from "@ant-design/icons";
+
 const { useToken } = theme;
 
 const { Header, Sider, Content } = Layout;
@@ -61,7 +64,15 @@ const Layouts = () => {
   const getList = () => {
     getMenuList({ page: -1 }).then((response) => {
       const { list } = response.data;
-      setMenu(list);
+      const menu = list.map((item) => {
+        console.log("item", item);
+        item.icon = item.icon ? (
+          <Icon component={icons[item.icon]} style={{ marginRight: "8px" }} />
+        ) : null;
+        return item;
+      });
+      console.log(menu);
+      setMenu(menu);
     });
   };
 

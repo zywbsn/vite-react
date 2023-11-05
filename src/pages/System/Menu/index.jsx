@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Space, Modal, Button, message, Popconfirm } from "antd";
 import { SuperForm, SuperTable } from "../../../components/index";
 import { createMenu, deleteMenu, getMenuList, updateMenu } from "../../../api/Menu/index";
+import Icon from "@ant-design/icons";
+import * as icons from "@ant-design/icons";
 
 import { useEffect } from "react";
 const Menu = () => {
@@ -63,6 +65,20 @@ const Menu = () => {
     },
     {
       align: "center",
+      title: "图标",
+      key: "icon",
+      dataIndex: "icon",
+      render: (_, record) => {
+        console.log("record", record);
+        return record.icon ? (
+          <Icon component={icons[record.icon]} style={{ marginRight: "8px" }} />
+        ) : (
+          "--"
+        );
+      }
+    },
+    {
+      align: "center",
       title: "操作",
       key: "action",
       render: (_, record) => (
@@ -98,26 +114,27 @@ const Menu = () => {
     {
       label: "菜单名称",
       name: "label",
-      placeholder: "input key",
       rules: [{ required: true, message: "input" }]
     },
     {
       label: "路径",
       name: "key",
-      placeholder: "input name",
       rules: [{ required: true, message: "input" }]
     },
     {
       label: "组件地址",
-      name: "component",
-      placeholder: "input key"
+      name: "component"
     },
     {
       label: "上级路由",
       name: "father",
       type: "treeSelect",
-      placeholder: "select age",
       list: menu
+    },
+    {
+      label: "图标",
+      name: "icon",
+      type: "iconSelect"
     },
     {
       label: "排序",

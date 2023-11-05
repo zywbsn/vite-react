@@ -3,17 +3,23 @@ import Layouts from "./Layouts/index";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login/index";
 import MenuList from "./utils/GetRoutesList";
+import { AuthLogin } from "./components/index";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default () => {
+const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
           {/* 路由重定向 */}
-          <Route path="/" element={<Navigate to="/Login" />} />
+          {/* <Route path="/" element={<Navigate to="/Login" />} /> */}
           <Route path="/Login" element={<Login />} />
-          <Route path="/Layout" element={<Layouts />}>
+          <Route
+            path="/"
+            element={
+              <AuthLogin>
+                <Layouts />
+              </AuthLogin>
+            }>
             {MenuList.map((item) => {
               if (item.component)
                 return <Route key={item.key} path={item.key} element={<item.component />} />;
@@ -24,3 +30,5 @@ export default () => {
     </>
   );
 };
+
+export default App;
