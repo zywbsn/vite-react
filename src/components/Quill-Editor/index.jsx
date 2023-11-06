@@ -2,7 +2,14 @@ import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const QuillEditor = ({ value, setValue, ...rest }) => {
+const QuillEditor = ({ value, mode, setValue, style, ...rest }) => {
+  const defaultStyle = {
+    width: mode === "mobile" ? "375px" : "100%",
+    maxHeight: "800px",
+    height: "800px",
+    overflow: "auto",
+    ...style
+  };
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // 加粗，斜体，下划线，删除线
     ["blockquote", "code-block"], // 引用，代码块
@@ -31,7 +38,9 @@ const QuillEditor = ({ value, setValue, ...rest }) => {
   const onChange = (content, delta, source, editor) => {
     setValue(content, delta, source, editor);
   };
-  return <ReactQuill {...rest} value={value} onChange={onChange} {...options} />;
+  return (
+    <ReactQuill value={value} onChange={onChange} {...options} style={defaultStyle} {...rest} />
+  );
 };
 
 export default QuillEditor;
