@@ -23,7 +23,7 @@ const Layouts = () => {
     localStorage.getItem("dark") == "true" ? true : false
   );
   const [collapsed, setCollapsed] = useState(false); //菜单展开
-  const { pathname: defaultSelectedKeys } = usePath;
+  const { pathname: defaultSelectedKeys } = usePath; //当前路由
   const defaultOpenKeys = defaultSelectedKeys.split("/").slice(0, 2).join("/"); //刷新默认展开
   //点击菜单
   const onSelectMenu = ({ key }) => {
