@@ -1,7 +1,6 @@
 import { message } from "antd";
 
 export const CheckStatus = (status) => {
-  console.log("status", status);
   const msgList = [
     { status: 400, message: "请求失败！请您稍后重试" },
     { status: 401, message: "登录失效！请您重新登录" },

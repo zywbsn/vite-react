@@ -3,7 +3,6 @@ import { Tag } from "antd";
 
 const SuperTags = (props) => {
   const { menu, tags } = props;
-  console.log(tags, "tags");
   if (typeof tags === "string") {
     return (
       <Tag color={menu.find((i) => tags == i.value).color} key={tags}>

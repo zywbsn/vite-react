@@ -2,7 +2,6 @@ import service from "../index";
 
 //新建菜单
 export function deleteMenu(data) {
-  console.log("data", data);
   return service({
     url: "/menu/delete",
     method: "delete",
@@ -12,7 +11,6 @@ export function deleteMenu(data) {
 
 //新建菜单
 export function createMenu(data) {
-  console.log("data", data);
   return service({
     url: "/menu/create",
     method: "post",
@@ -22,7 +20,6 @@ export function createMenu(data) {
 
 //更新菜单
 export function updateMenu(data) {
-  console.log("data", data);
   return service({
     url: "/menu/update",
     method: "put",

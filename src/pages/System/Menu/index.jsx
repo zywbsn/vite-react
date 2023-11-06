@@ -69,7 +69,6 @@ const Menu = () => {
       key: "icon",
       dataIndex: "icon",
       render: (_, record) => {
-        console.log("record", record);
         return record.icon ? (
           <Icon component={icons[record.icon]} style={{ marginRight: "8px" }} />
         ) : (

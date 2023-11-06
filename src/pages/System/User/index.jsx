@@ -35,8 +35,6 @@ const User = () => {
           });
         }
       });
-      console.log(list);
-      // setMenu([{ title: "一级路由", value: 0 }, { title: "父级路由", value: 1 }, ...list]);
       setMenu(list);
     });
   };

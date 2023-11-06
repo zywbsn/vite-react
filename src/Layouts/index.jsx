@@ -65,13 +65,11 @@ const Layouts = () => {
     getMenuList({ page: -1 }).then((response) => {
       const { list } = response.data;
       const menu = list.map((item) => {
-        console.log("item", item);
         item.icon = item.icon ? (
           <Icon component={icons[item.icon]} style={{ marginRight: "8px" }} />
         ) : null;
         return item;
       });
-      console.log(menu);
       setMenu(menu);
     });
   };

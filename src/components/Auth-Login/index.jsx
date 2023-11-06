@@ -2,7 +2,7 @@
 import { useLocation, Navigate } from "react-router-dom";
 function AuthLogin({ children }) {
   const { pathname } = useLocation();
-  console.log("pathname", pathname);
+  if (pathname === "/") return <Navigate to="/Home" />;
   //校验
   if (pathname.startsWith("/Login")) {
     return children;

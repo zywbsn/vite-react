@@ -75,7 +75,6 @@ const SuperTable = React.forwardRef((props, ref) => {
   React.useImperativeHandle(ref, () => ({ getList, FormRef }));
 
   const onChange = (page, pageSize) => {
-    console.log(page, pageSize);
     getList({ page: page, size: pageSize });
   };
 

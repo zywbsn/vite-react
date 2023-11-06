@@ -17,7 +17,6 @@ const Item = (props) => {
 
     const setValue = (value) => {
       selectIconValue = value;
-      console.log("setValue", value);
       setIconValue(value);
     };
 
@@ -121,7 +120,6 @@ const SuperForm = React.forwardRef((props, ref) => {
 
   //提交表单
   const onSubmit = async () => {
-    console.log("selectIconValue", selectIconValue);
     const values = await form.validateFields();
     formItems.map((item) => {
       if (item.type === "date") {
@@ -130,7 +128,6 @@ const SuperForm = React.forwardRef((props, ref) => {
     });
     const query = { ...values };
     query.icon = selectIconValue;
-    console.log("query", query);
     submitMethod(query); //传给父组件
     form.resetFields();
   };

@@ -135,7 +135,6 @@ const Rule = () => {
 
   const tableRef = React.useRef();
   const onRef = () => {
-    console.log("tableRef", tableRef.current);
     tableRef.current.getList();
   };
   return (
