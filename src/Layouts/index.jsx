@@ -24,7 +24,7 @@ const Layouts = () => {
   );
   const [collapsed, setCollapsed] = useState(false); //菜单展开
   const { pathname: defaultSelectedKeys } = usePath;
-  const defaultOpenKeys = defaultSelectedKeys.split("/").slice(0, 3).join("/"); //刷新默认展开
+  const defaultOpenKeys = defaultSelectedKeys.split("/").slice(0, 2).join("/"); //刷新默认展开
   //点击菜单
   const onSelectMenu = ({ key }) => {
     Navigate(key);
