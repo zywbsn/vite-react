@@ -6,17 +6,18 @@ import * as icons from "@ant-design/icons";
 const IconSelect = () => {
   const [iconValue, setIconValue] = React.useState("");
   const setValue = (value) => {
+    console.log(value);
     setIconValue(value);
   };
   return (
     <>
       <div className="main">
         <SelectIcon setValue={setValue} />
-        <div>
+        <div className="my-3">
           选中的图标：
           {iconValue ? <Icon component={icons[iconValue]} style={{ marginRight: "8px" }} /> : "--"}
         </div>
-        <div>
+        <div className="mb-3">
           图标名称：
           {iconValue || "--"}
         </div>
