@@ -1,11 +1,29 @@
-import { useState, useEffect } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined, Html5TwoTone } from "@ant-design/icons";
-import { Layout, Menu, Button, ConfigProvider, Switch, theme, ColorPicker } from "antd";
+import React from "react";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  Html5TwoTone,
+  DownOutlined
+} from "@ant-design/icons";
+import {
+  Layout,
+  Menu,
+  Button,
+  ConfigProvider,
+  Switch,
+  theme,
+  ColorPicker,
+  Breadcrumb,
+  Tabs,
+  Dropdown
+} from "antd";
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getMenuList } from "../api/Menu";
 import Icon from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
+import "./index.css";
+import { getMenuName } from "../utils/utils";
 
 const { useToken } = theme;
 
@@ -15,24 +33,31 @@ const Layouts = () => {
   const { token } = useToken();
   const Navigate = useNavigate();
   const usePath = useLocation();
-  const [menu, setMenu] = useState([]); //菜单
-  const [colorTextBase, setColorTextBase] = useState(token.colorTextBase);
-  const [colorBgContainer, setColorBgContainer] = useState(token.colorBgContainer);
-  const [colorBorderSecondary, setColorBorderSecondary] = useState(token.colorBorderSecondary);
-  const [darkStatus, setDarkStatus] = useState(
+  const [menu, setMenu] = React.useState([]); //菜单
+  const [colorTextBase, setColorTextBase] = React.useState(token.colorTextBase);
+  const [colorBgContainer, setColorBgContainer] = React.useState(token.colorBgContainer);
+  const [colorBorderSecondary, setColorBorderSecondary] = React.useState(
+    token.colorBorderSecondary
+  );
+  const [darkStatus, setDarkStatus] = React.useState(
     localStorage.getItem("dark") == "true" ? true : false
   );
-  const [collapsed, setCollapsed] = useState(false); //菜单展开
+  const [collapsed, setCollapsed] = React.useState(false); //菜单展开
   const { pathname: defaultSelectedKeys } = usePath; //当前路由
   const defaultOpenKeys = defaultSelectedKeys.split("/").slice(0, 2).join("/"); //刷新默认展开
-  //点击菜单
+
+  const [tabs, setTabs] = React.useState([]); //tab
+  const [activeKey, setActiveKey] = React.useState(defaultSelectedKeys); //tab //点击菜单
   const onSelectMenu = ({ key }) => {
+    setActiveKey(key);
+    const keys = tabs.map((item) => item.key);
+    if (!keys.includes(key)) setTabs([...tabs, { key, label: getMenuName(menu, key) }]);
     Navigate(key);
   };
 
   const primaryColor = localStorage.getItem("primary"); //缓存主题色
-  const [primary, setPrimary] = useState(primaryColor ?? "#1677ff");
-  const [themeColor, setThemeColor] = useState({});
+  const [primary, setPrimary] = React.useState(primaryColor ?? "#1677ff");
+  const [themeColor, setThemeColor] = React.useState({});
 
   //改变主题色
   const onChangeColor = (value) => {
@@ -71,10 +96,73 @@ const Layouts = () => {
         return item;
       });
       setMenu(menu);
+      setTabs([{ key: defaultSelectedKeys, label: getMenuName(menu, defaultSelectedKeys) }]);
     });
   };
 
-  useEffect(() => {
+  const DropdownClick = {
+    0: (pathname) => {
+      // Navigate(0);
+      Navigate(pathname);
+    },
+    1: (pathname) => {
+      const newTabs = tabs.filter((tab) => tab.key !== pathname);
+      setTabs(newTabs);
+      if (newTabs.length === 0) Navigate("/");
+    },
+    2: (pathname) => {
+      setTabs([]);
+      Navigate("/");
+    },
+    3: (pathname) => {
+      const newTabs = tabs.filter((tab) => tab.key === pathname);
+      setTabs(newTabs);
+    }
+  };
+
+  const onClickDropdown = ({ key }) => {
+    const { pathname } = usePath;
+    DropdownClick[key](pathname);
+  };
+
+  const dropdownList = [
+    // {
+    //   key: 0,
+    //   label: "刷新"
+    // },
+    {
+      key: 1,
+      label: "关闭当前页"
+    },
+    {
+      key: 2,
+      label: "关闭全部标签"
+    },
+    {
+      key: 3,
+      label: "关闭其他标签"
+    }
+  ];
+  const operations = (
+    <Dropdown
+      className=" ml-auto mr-5"
+      menu={{
+        onClick: onClickDropdown,
+        items: dropdownList
+      }}
+      placement="bottomLeft">
+      <DownOutlined />
+    </Dropdown>
+  );
+  const onEdit = (targetKey, action) => {
+    if (action === "remove") {
+      const newTabs = tabs.filter((tab) => tab.key !== targetKey);
+      setTabs(newTabs);
+      if (newTabs.length === 0) Navigate("/");
+    }
+  };
+
+  React.useEffect(() => {
     getList();
     onChange(darkStatus);
   }, []);
@@ -90,6 +178,10 @@ const Layouts = () => {
           components: {
             Form: {
               itemMarginBottom: "12px"
+            },
+            Tabs: {
+              horizontalMargin: 0
+              // horizontalItemPaddingSM: 0
             }
             // Pagination: {
             //   /* here is your component tokens */
@@ -123,24 +215,56 @@ const Layouts = () => {
                 backgroundColor: colorBgContainer,
                 borderBottom: `1px solid ${colorBorderSecondary}`
               }}
-              className="flex w-full items-center h-[60px]">
+              className="flex w-full items-center h-[60px] flex-wrap">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => setCollapsed(!collapsed)}
                 style={{
-                  fontSize: "16px",
-                  width: 64,
-                  height: 64
+                  fontSize: "16px"
+                  // width: 64,
+                  // height: 64
                 }}
               />
-              <ColorPicker defaultValue={primary} onChange={onChangeColor} />
-              <Switch checked={darkStatus} onChange={onChange} />
+              <Breadcrumb
+                items={
+                  defaultSelectedKeys !== defaultOpenKeys
+                    ? [
+                        { title: menu.find((item) => item.key === defaultOpenKeys)?.label },
+                        {
+                          title: menu
+                            .find((item) => item.key === defaultOpenKeys)
+                            ?.children.find((item) => item.key === defaultSelectedKeys)?.label
+                        }
+                      ]
+                    : [{ title: menu.find((item) => item.key === defaultOpenKeys)?.label }]
+                }></Breadcrumb>
+              <ColorPicker size="small" defaultValue={primary} onChange={onChangeColor} />
+              <Switch size="small" checked={darkStatus} onChange={onChange} />
             </Header>
-            <Content className="m-3 h-[calc(100vh-112px)]">
+            <Content className="h-[calc(100vh-112px)]">
+              <div
+                className="h-[40px] flex items-end"
+                style={{ backgroundColor: colorBgContainer }}>
+                <Tabs
+                  type="editable-card"
+                  hideAdd
+                  activeKey={activeKey}
+                  defaultActiveKey={defaultSelectedKeys}
+                  tabPosition="top"
+                  size="small"
+                  className="overflow-x-auto overflow-y-hidden w-full flex"
+                  items={tabs}
+                  onTabClick={(key) => onSelectMenu({ key })}
+                  onEdit={onEdit}
+                  tabBarExtraContent={operations}
+                />
+              </div>
+              <div className="m-3 h-[calc(100vh-122px)]">
+                <Outlet />
+              </div>
               {/*  overflow-auto */}
               {/* style={{ backgroundColor: colorBgContainer }} */}
-              <Outlet />
             </Content>
           </Layout>
         </Layout>
