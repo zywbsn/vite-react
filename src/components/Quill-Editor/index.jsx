@@ -5,8 +5,8 @@ import "react-quill/dist/quill.snow.css";
 const QuillEditor = ({ value, mode, setValue, style, ...rest }) => {
   const defaultStyle = {
     width: mode === "mobile" ? "375px" : "100%",
-    maxHeight: "800px",
-    height: "800px",
+    maxHeight: "500px",
+    height: "500px",
     overflow: "auto",
     ...style
   };

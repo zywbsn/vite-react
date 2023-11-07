@@ -22,7 +22,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getMenuList } from "../api/Menu";
 import Icon from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
-import "./index.css";
 import { getMenuName } from "../utils/utils";
 
 const { useToken } = theme;

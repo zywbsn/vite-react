@@ -14,6 +14,7 @@ const RichText = () => {
     <>
       <div className="main">
         <QuillEditor theme="snow" value={value} setValue={onChange} />
+        <div>{value}</div>
         <div dangerouslySetInnerHTML={{ __html: value }} />
       </div>
     </>
