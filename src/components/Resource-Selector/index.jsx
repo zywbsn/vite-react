@@ -49,10 +49,14 @@ const ResourceSelector = () => {
   return (
     <>
       <div
-        className="w-[148px] h-[148px] bg-red-200 rounded-lg border-green-800 border-dashed border flex items-center justify-center"
+        style={{
+          border: `1px dashed ${token.colorTextBase}`,
+          backgroundColor: token.colorBgLayout
+        }}
+        className="w-[148px] h-[148px] rounded-lg  flex items-center justify-center"
         onClick={() => setOpen(true)}>
         {/* <Button type="primary" size="large" icon={<PlusOutlined />} /> */}
-        <PlusOutlined className="text-4xl" />
+        <PlusOutlined className="text-4xl" style={{ color: token.colorTextBase }} />
       </div>
       <Modal
         title={`选择资源`}
