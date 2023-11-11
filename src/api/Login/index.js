@@ -1,6 +1,6 @@
 import service from "../index";
 
-//新建菜单
+//登录
 export function Login(data) {
   return service({
     url: "/login",

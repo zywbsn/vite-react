@@ -1,52 +1,48 @@
 import React from "react";
 import { theme, Button, message, Upload } from "antd";
 import { UploadOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { UploadFn } from "../../../api/Common";
+import UploadFile from "../../../components/Upload-File";
 
 const { useToken } = theme;
 
-const UploadFile = () => {
+const UploadFilePage = () => {
   const { token } = useToken();
-  const [imageUrl, setImageUrl] = React.useState();
-  const [loading, setLoading] = React.useState(false);
-  const [fileInfo, setFileInfo] = React.useState();
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8
-        }}>
-        Upload
-      </div>
-    </div>
-  );
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
+  const [file, setFile] = React.useState();
+
+  const onChange = (value) => {
+    setFile(value);
   };
 
-  const props = {
-    listType: "picture-card",
-    maxCount: 1,
-    beforeUpload: (file) => {
-      setFileInfo(file);
-      return false;
-    },
-    onRemove: () => {
-      setFileInfo(null);
-    }
-  };
   return (
     <>
       <div className="main" style={{ backgroundColor: token.colorBgContainer }}>
-        <Upload {...props}>
-          {/* <Button icon={<UploadOutlined />}>Click to Upload</Button> */}
-          {fileInfo ? null : uploadButton}
-        </Upload>
-        <div>/SuperComponents/UploadFile</div>
+        <UploadFile listType="picture-circle" file={file} setFile={onChange} />
+        <p>头像类型上传点击上传时发起上传请求</p>
+        <Button
+          onClick={() => {
+            UploadFn({ file })
+              .then((response) => {
+                console.log(response);
+                message.success("操作成功");
+              })
+              .catch((error) => {
+                console.log("error", error);
+              });
+          }}
+          icon={<UploadOutlined />}>
+          上传
+        </Button>
+        <br />
+        <br />
+        <br />
+        <br />
+        <UploadFile listType="text">
+          <Button icon={<UploadOutlined />}>上传图片</Button>
+        </UploadFile>
       </div>
     </>
   );
 };
-export default UploadFile;
+
+export default UploadFilePage;
