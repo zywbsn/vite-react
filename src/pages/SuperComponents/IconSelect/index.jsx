@@ -6,7 +6,6 @@ import * as icons from "@ant-design/icons";
 const IconSelect = () => {
   const [iconValue, setIconValue] = React.useState("");
   const setValue = (value) => {
-    console.log(value);
     setIconValue(value);
   };
   return (

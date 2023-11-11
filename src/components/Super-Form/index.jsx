@@ -4,21 +4,14 @@ import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { SuperButton } from "../index";
 import dayjs from "dayjs";
 import SelectIcon from "../Select-Icon";
-var selectIconValue = "";
 const Item = (props) => {
   const { items, search, flag } = props;
-  const [iconValue, setIconValue] = React.useState();
 
   return items.map((item, index) => {
     if (flag && search && index > 2) {
       return null;
     }
     const space = JSON.stringify(item) === "{}";
-
-    const setValue = (value) => {
-      selectIconValue = value;
-      setIconValue(value);
-    };
 
     return space ? (
       <Form.Item />
@@ -39,7 +32,7 @@ const Item = (props) => {
             ? item.list[0].value
             : item.config?.mode === "multiple" || item.config?.treeCheckable
             ? []
-            : ""
+            : undefined
         }>
         {item.type === "radio" ? (
           <Radio.Group {...item.config} options={item.list} />
@@ -65,7 +58,7 @@ const Item = (props) => {
             treeData={item.list}
           />
         ) : item.type === "iconSelect" ? (
-          <SelectIcon setValue={setValue} />
+          <SelectIcon placeholder={item.placeholder ?? "请选择"} />
         ) : (
           <Input {...item.config} placeholder={item.placeholder ?? "请输入"} />
         )}
@@ -127,7 +120,6 @@ const SuperForm = React.forwardRef((props, ref) => {
       }
     });
     const query = { ...values };
-    query.icon = selectIconValue;
     submitMethod(query); //传给父组件
     form.resetFields();
   };

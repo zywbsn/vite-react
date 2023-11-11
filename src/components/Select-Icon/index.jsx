@@ -3,29 +3,34 @@ import { Select } from "antd";
 import Icon from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
 
-const SelectIcon = ({ placeholder = "请选择图标", setValue, iconStyle, mode, ...rest }) => {
+const SelectIcon = ({
+  value = undefined,
+  placeholder = "请选择图标",
+  setValue,
+  iconStyle,
+  mode,
+  ...rest
+}) => {
   // 里面有一些是方法,要筛选一遍,否则页面会报错
   const iconList = Object.keys(icons).filter(
     (item) => typeof icons[item] === "object" && item !== "default"
   );
-  const [defaultValue, setDefaultValue] = React.useState();
-
+  const [defaultValue, setDefaultValue] = React.useState(mode === "multiple" ? [] : "");
   const onSelect = (value) => {
-    mode === "multiline"
-      ? setDefaultValue(value)
-      : setDefaultValue([...(defaultValue || []), value]);
-    setValue(defaultValue);
+    const iconValue = mode === "multiple" ? [...(defaultValue || []), value] : value;
+    setDefaultValue(iconValue);
+    setValue && setValue(iconValue);
   };
   return (
     <Select
-      onSelect={onSelect}
+      value={value}
       placeholder={placeholder}
-      defaultValue={defaultValue}
+      mode={mode}
       showSearch
       allowClear
       optionLabelProp="children"
-      mode={mode}
       style={{ width: "100%" }}
+      onSelect={onSelect}
       {...rest}>
       {iconList.map((item) => {
         return (
