@@ -60,7 +60,8 @@ const User = () => {
       align: "center",
       title: "权限",
       dataIndex: "rule",
-      key: "rule"
+      key: "rule",
+      render: (_, record) => <span>{record.rule_label.join(",")}</span>
     },
     {
       align: "center",
@@ -130,7 +131,7 @@ const User = () => {
   //编辑
   const onEdit = (row) => {
     const query = { ...row };
-    query.rule = query.rule.split(",");
+    // query.rule = query.rule.split(",");
     setFlag(false);
     setFormData(query);
     setOpen(true);
