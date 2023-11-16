@@ -120,6 +120,9 @@ const SuperForm = React.forwardRef((props, ref) => {
       }
     });
     const query = { ...values };
+    for (const key in query) {
+      if (query[key] === undefined || query[key] === null) query[key] = "";
+    }
     submitMethod(query); //传给父组件
     form.resetFields();
   };
