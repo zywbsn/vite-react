@@ -5,12 +5,17 @@ import { Login } from "../../api/Login/index";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
-
+  const info = {
+    username: "admin",
+    password: "123456"
+  };
   const Navigate = useNavigate();
 
   const onReset = () => {
     form.resetFields();
   };
+
+  React.useEffect(() => form.setFieldsValue(info), []);
 
   const onLogin = async () => {
     const values = await form.validateFields();
