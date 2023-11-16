@@ -48,6 +48,7 @@ const Layouts = () => {
   const [tabs, setTabs] = React.useState([]); //tab
   const [activeKey, setActiveKey] = React.useState(defaultSelectedKeys); //tab //点击菜单
   const onSelectMenu = ({ key }) => {
+    console.log("key", key);
     setActiveKey(key);
     const keys = tabs.map((item) => item.key);
     if (!keys.includes(key)) setTabs([...tabs, { key, label: getMenuName(menu, key) }]);
@@ -107,7 +108,8 @@ const Layouts = () => {
     1: (pathname) => {
       const newTabs = tabs.filter((tab) => tab.key !== pathname);
       setTabs(newTabs);
-      if (newTabs.length === 0) Navigate("/");
+      if (newTabs.length !== 0) return onSelectMenu({ key: newTabs[newTabs.length - 1].key });
+      Navigate("/");
     },
     2: (pathname) => {
       setTabs([]);
