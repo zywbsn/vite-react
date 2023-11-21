@@ -164,7 +164,7 @@ const Menu = () => {
     const query = {
       ...formData,
       ...val,
-      is_father: val.father === 1 ? 1 : 0
+      is_father: val.father == 1 ? 1 : 0
     };
 
     flag

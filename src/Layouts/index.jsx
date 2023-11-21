@@ -48,10 +48,10 @@ const Layouts = () => {
   const [tabs, setTabs] = React.useState([]); //tab
   const [activeKey, setActiveKey] = React.useState(defaultSelectedKeys); //tab //点击菜单
   const onSelectMenu = ({ key }) => {
-    console.log("key", key);
     setActiveKey(key);
     const keys = tabs.map((item) => item.key);
     if (!keys.includes(key)) setTabs([...tabs, { key, label: getMenuName(menu, key) }]);
+    localStorage.setItem("tabs", JSON.stringify(tabs));
     Navigate(key);
   };
 
