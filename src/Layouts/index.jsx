@@ -20,9 +20,9 @@ import {
 import { Outlet } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getMenuList } from "../api/Menu";
+import { getMenuName } from "../utils/utils";
 import Icon from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
-import { getMenuName } from "../utils/utils";
 
 const { useToken } = theme;
 
